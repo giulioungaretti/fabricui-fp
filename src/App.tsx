@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -93,12 +93,8 @@ const Counter = ({
   dispatchIncrement,
   dispatchDecrement
 }: RouteComponentProps & CounterProps & CounterPageState) => {
-  const di = () => {
-    dispatchIncrement(increment);
-  };
-  const de = () => {
-    dispatchDecrement(increment);
-  };
+  // Declare a new state variable, which we'll call "count"
+  const [localIncrement, setLocalIncrement] = useState(increment);
   return (
     <>
       <Header route={location.pathname} />
@@ -114,11 +110,38 @@ const Counter = ({
       >
         <img src={logo} alt="logo" />
         <Stack horizontal>
-          <DefaultButton text="+" onClick={di} />
+          <DefaultButton
+            text="+"
+            onClick={() => {
+              dispatchIncrement(localIncrement);
+            }}
+          />
           <Text variant="xxLarge" styles={boldStyle}>
             {`count is: ${n}`}
           </Text>
-          <DefaultButton text="-" onClick={de} />
+          <DefaultButton
+            text="-"
+            onClick={() => {
+              dispatchDecrement(localIncrement);
+            }}
+          />
+        </Stack>
+        <Stack horizontal>
+          <DefaultButton
+            text="+"
+            onClick={() => {
+              setLocalIncrement(localIncrement + 1);
+            }}
+          />
+          <Text variant="xxLarge" styles={boldStyle}>
+            {`increment is: ${localIncrement}`}
+          </Text>
+          <DefaultButton
+            text="-"
+            onClick={() => {
+              setLocalIncrement(localIncrement - 1);
+            }}
+          />
         </Stack>
         <Link to="/">home</Link>
         <Link to="/about">about</Link>
