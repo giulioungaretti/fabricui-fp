@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-const App: React.FC = () => {
+import { Stack, Text, Link, FontWeights } from "office-ui-fabric-react";
+
+import logo from "./fabric.png";
+
+const boldStyle = {
+  root: { fontWeight: FontWeights.semibold }
+};
+export const App: React.FunctionComponent = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Stack
+      horizontalAlign="center"
+      verticalAlign="center"
+      verticalFill
+      styles={{
+        root: {
+          width: "100%",
+          margin: "0 auto",
+          textAlign: "center",
+          color: "#605e5c"
+        }
+      }}
+    >
+      <img src={logo} alt="logo" />
+
+      <Text variant="xxLarge" styles={boldStyle}>
+        Welcome to Your UI Fabric App
+      </Text>
+    </Stack>
   );
-}
+};
 
 export default App;

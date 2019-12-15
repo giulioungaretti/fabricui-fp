@@ -1,3 +1,15 @@
+# FabricUi playground
+
+This project is a very overkill starter template for a spa with:
+
+React
+React-router
+Redux-rtk
+FabricUI
+
+And uses typescript!
+
+### info:
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
