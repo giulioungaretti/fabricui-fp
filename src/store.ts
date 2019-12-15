@@ -1,7 +1,7 @@
 import { combineReducers, configureStore, Action } from '@reduxjs/toolkit'
 import { ThunkAction } from 'redux-thunk'
 
-import counterReducer from './counter'
+import counterReducer from './CounterSlice'
 
 const rootReducer = combineReducers({
     counter: counterReducer
