@@ -1,19 +1,12 @@
 import React from "react";
 
-import {
-  Stack,
-  Text,
-  FontWeights,
-  DefaultButton
-} from "office-ui-fabric-react";
+import { Stack, Text, FontWeights } from "office-ui-fabric-react";
 
 import { Link, RouteComponentProps } from "react-router-dom";
 
 import { Depths } from "@uifabric/fluent-theme/lib/fluent/FluentDepths";
 
 import logo from "./fabric.png";
-
-import { setRoute, home } from "./Route";
 
 export const boldStyle = {
   root: { fontWeight: FontWeights.semibold }
@@ -44,12 +37,6 @@ export const Header: React.FC<IRoute> = props => {
       <Link to="/about">about</Link>
       <Link to="/user/giulio">giulio</Link>
       <Link to="/counter">counter</Link>
-      <a href="#/counter">A</a>
-      <DefaultButton
-        onClick={() => {
-          setRoute(home);
-        }}
-      />
     </Stack>
   );
 };
