@@ -1,10 +1,8 @@
-export interface IHttpResponse<T> extends Response {
-    parsedBody?: T;
-}
 
-export const get = <T>(request: RequestInfo): Promise<T> => {
+
+export const get = (request: RequestInfo): Promise<string> => {
     return new Promise((resolve, reject) => {
-        let response: IHttpResponse<T>;
+        let response: Response;
         fetch(request)
             .then(res => {
                 response = res;
@@ -22,11 +20,23 @@ export const get = <T>(request: RequestInfo): Promise<T> => {
             });
     });
 };
-interface IDictionary {
-    [index: string]: number;
-}
-interface IRandom {
-    rates: IDictionary;
-}
+// interface IDictionary {
+// // [index: string]: number;
+// }
+// interface IRandom {
+// // rates: IDictionary;
+// }
+// 
+// interface Decodable<T> {
+// // decode: (i: string) => Either<t.Errors, T>;
+// }
 
-export const fetchCounter = () => get<IRandom>("https://frankfurter.app/latest")
+// type User = t.TypeOf<typeof Payload>
+// function loggingIdentity<G, T extends Decodable<G>>(t: T): Either<t.Errors, G> {
+// // const asd = t.decode("{ammount:'10'}");
+// // console.log(asd)
+// // return asd
+// }
+// 
+// loggingIdentity<User, t.TypeC>(Payload);
+export const fetchCounter = () => get("https://frankfurter.app/latest")

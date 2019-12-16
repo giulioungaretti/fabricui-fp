@@ -5,6 +5,10 @@ import { pipe } from 'fp-ts/es6/pipeable'
 import { AppThunk } from './store'
 import { fetchCounter } from './http'
 
+import * as t from 'io-ts'
+import { PathReporter } from 'io-ts/lib/PathReporter'
+import * as e from 'fp-ts/es6/Either';
+
 interface Increment {
     n: number
 }
@@ -56,16 +60,25 @@ export const {
 export default counterSlice.reducer
 
 
-export const fetchInitialCounter = (
-): AppThunk => async dispatch => {
+const Payload = t.type(
+    {
+        amount: t.number,
+        base: t.number
+    }
+)
+
+export const fetchInitialCounter = (): AppThunk => async dispatch => {
     try {
         console.log("fire missile!")
-        const repoDetails = await fetchCounter()
-        const cad = repoDetails.rates["CAD"]
-        if (cad == null) {
-            dispatch(failedCounter("WeirdJson received sorry"));
-        } else {
-            dispatch(loadedCounter(cad))
+        const response = await fetchCounter()
+        const parsed = Payload.decode(response);
+        if (e.isLeft(parsed)) {
+            const errors = PathReporter.report(parsed)
+            const msg = `Errors: ${errors.join(', ')}`
+            dispatch(failedCounter(msg))
+        }
+        if (e.isRight(parsed)) {
+            dispatch(loadedCounter(parsed.right.amount))
         }
     } catch (err) {
         dispatch(failedCounter(err.toString()))

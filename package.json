@@ -16,6 +16,7 @@
     "@types/webpack-env": "^1.14.1",
     "@uifabric/fluent-theme": "^7.1.4",
     "fp-ts": "^2.3.1",
+    "io-ts": "^2.0.1",
     "office-ui-fabric-react": "^7.73.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
