@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/types": "^7.7.4",
     "@reduxjs/toolkit": "^1.1.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -16,6 +17,7 @@
     "@types/webpack-env": "^1.14.1",
     "@uifabric/fluent-theme": "^7.1.4",
     "fp-ts": "^2.3.1",
+    "fp-ts-routing": "^0.5.1",
     "io-ts": "^2.0.1",
     "office-ui-fabric-react": "^7.73.0",
     "react": "^16.12.0",
