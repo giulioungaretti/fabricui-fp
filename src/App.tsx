@@ -1,9 +1,8 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { Stack } from "office-ui-fabric-react";
 
-import { Home } from "./Components";
+import { NotFoundPage } from "./Components";
 import { CounterPage } from "./Counter";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment } from "./CounterSlice";
@@ -13,6 +12,7 @@ import { RootState } from "./store";
 export const App: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const { n, error } = useSelector((state: RootState) => state.counter);
+  const { location } = useSelector((state: RootState) => state.location);
 
   const dispatchIncrement = (step: number) => {
     dispatch(increment({ n: step }));
@@ -43,39 +43,31 @@ export const App: React.FunctionComponent = () => {
           }
         }}
       >
-        <Router>
-          <Switch>
-            <Route
-              exact
-              path="/about"
-              render={props => <Home {...props} someData="about" />}
-            />
-            <Route
-              exact
-              path="/user/:id"
-              render={props => <Home {...props} someData="user" />}
-            />
-            <Route
-              exact
-              path="/counter"
-              render={props => (
+        {(() => {
+          //console.log("currentpage", location._tag);
+          //if (navigating) {
+          //return <Spinner />;
+          //}
+          switch (location._tag) {
+            case "Home":
+            case "Counter":
+              return (
                 <CounterPage
-                  {...props}
+                  {...{ location: location._tag }}
                   n={n}
                   increment={1}
                   error={error}
                   dispatchIncrement={dispatchIncrement}
                   dispatchDecrement={dispatchDecrement}
                 />
-              )}
-            />
-            <Route
-              exact
-              path="/"
-              render={props => <Home {...props} someData="home" />}
-            />
-          </Switch>
-        </Router>
+              );
+            case "NotFound":
+              return <NotFoundPage />;
+            default:
+              const _exhaustiveCheck: never = location;
+              return _exhaustiveCheck;
+          }
+        })()}
       </Stack>
     </Stack>
   );

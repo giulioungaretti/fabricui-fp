@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { RouteComponentProps } from "react-router-dom";
 import {
   Stack,
   Text,
@@ -25,6 +24,10 @@ interface CounterProps {
   dispatchDecrement: (step: number) => void;
 }
 
+interface RouteProps {
+  location: string;
+}
+
 interface IErrorBarProps {
   error: string;
 }
@@ -48,12 +51,15 @@ export const CounterPage = ({
   error,
   dispatchIncrement,
   dispatchDecrement
-}: RouteComponentProps & CounterProps & CounterPageState) => {
+}: RouteProps & CounterProps & CounterPageState) => {
   const [localIncrement, setLocalIncrement] = useState(increment);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchInitialCounter());
-  }, [dispatch]);
+  useEffect(
+    () => {
+      dispatch(fetchInitialCounter());
+    },
+    [dispatch]
+  );
   const isLoading = isNone(n);
   let body = pipe(
     n,
@@ -70,7 +76,7 @@ export const CounterPage = ({
   );
   return (
     <>
-      <Header route={location.pathname} />
+      <Header route={location} />
       {pipe(
         error,
         fold(

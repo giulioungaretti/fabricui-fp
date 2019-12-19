@@ -1,8 +1,13 @@
 import { lit, end, format, zero, parse, Route } from "fp-ts-routing";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk } from "./store";
 
 interface Home {
   readonly _tag: "Home";
+}
+
+interface Counter {
+  readonly _tag: "Counter";
 }
 
 interface NotFound {
@@ -10,9 +15,10 @@ interface NotFound {
   requested: string;
 }
 
-type Location = Home | NotFound;
+type Location = Home | NotFound | Counter;
 
 export const home: Location = { _tag: "Home" };
+export const counter: Location = { _tag: "Counter" };
 
 const notFound = (requested: string): Location => ({
   _tag: "NotFound",
@@ -22,24 +28,41 @@ const notFound = (requested: string): Location => ({
 // matches
 const defaults = end;
 const homeMatch = lit("home").then(end);
+const counterMatch = lit("counter").then(end);
 
 // router
 const router = zero<Location>()
   .alt(defaults.parser.map(() => home))
-  .alt(homeMatch.parser.map(() => home));
+  .alt(homeMatch.parser.map(() => home))
+  .alt(counterMatch.parser.map(() => counter));
 
 // helper
 export const parseLocation = (s: string): Location =>
   parse(router, Route.parse(s), notFound(s));
 
 export const setRoute = (location: Location): void => {
+  console.log("setRoute: ", location);
   switch (location._tag) {
     case "Home":
-      const locations = format(homeMatch.formatter, location);
-      window.history.pushState({}, "", `#${locations}`);
+      const homeLocation = format(homeMatch.formatter, location);
+      console.log("setRoute *********: ", homeLocation);
+      const hz = `#${homeLocation}`;
+      //      window.history.pushState({}, "", hz );
+      window.location.replace(
+        window.location.pathname + window.location.search + hz
+      );
+      break;
+    case "Counter":
+      const counterLocation = format(counterMatch.formatter, location);
+      const cu = `#${counterLocation}`;
+      //window.history.pushState({}, "", cu);
+      console.log("setRoute------->: ", counterLocation);
+      window.location.replace(
+        window.location.pathname + window.location.search + cu
+      );
       break;
     case "NotFound":
-      console.log(location);
+      console.log("not found", location);
       break;
     default:
       const _exhaustiveCheck: never = location;
@@ -47,29 +70,9 @@ export const setRoute = (location: Location): void => {
   }
 };
 
-//import * as assert from "assert";
-
-//
-// parsers
-//
-
-//assert.strictEqual(parseLocation("/"), home);
-//assert.strictEqual(parseLocation("/home"), home);
-//assert.deepEqual(parseLocation("/users/1"), user(1));
-//assert.deepEqual(parseLocation("/users/1/invoice/2"), invoice(1, 2));
-//assert.strictEqual(parseLocation("/foo"), notFound);
-
-////
-//// formatters
-////
-
-//assert.strictEqual(format(userMatch.formatter, { userId: 1 }), "/users/1");
-//assert.strictEqual(
-//format(invoiceMatch.formatter, { userId: 1, invoiceId: 2 }),
-//"/users/1/invoice/2"
-//);
-
-// redux
+interface NavigationPayload {
+  to: Location;
+}
 
 interface NavigationPayload {
   to: Location;
@@ -79,14 +82,24 @@ interface RouteState {
   location: Location;
 }
 
-let initialState: RouteState = { location: home };
+let initialState: RouteState = {
+  location: parseLocation(window.location.hash.substring(1)),
+};
 
 const routerSlice = createSlice({
   name: "router",
   initialState: initialState,
   reducers: {
     navigate: (state, action: PayloadAction<NavigationPayload>) => {
-      return { location: action.payload.to };
+      const from = state.location;
+      const to = action.payload.to;
+      console.debug(`navigate from ${from} to:${to}`);
+      if (from !== to) {
+        setRoute(to);
+        return { location: to };
+      } else {
+        return state
+      }
     }
   }
 });
@@ -94,26 +107,3 @@ const routerSlice = createSlice({
 export const { navigate } = routerSlice.actions;
 
 export default routerSlice.reducer;
-
-//const Payload = t.type({
-//amount: t.number,
-//base: t.number
-//});
-
-//export const fetchInitialCounter = (): AppThunk => async dispatch => {
-//try {
-//console.log("fire missile!");
-//const response = await fetchCounter();
-//const parsed = Payload.decode(response);
-//if (e.isLeft(parsed)) {
-//const errors = PathReporter.report(parsed);
-//const msg = `Errors: ${errors.join(", ")}`;
-//dispatch(failedCounter(msg));
-//}
-//if (e.isRight(parsed)) {
-//dispatch(loadedCounter(parsed.right.amount));
-//}
-//} catch (err) {
-//dispatch(failedCounter(err.toString()));
-//}
-//};

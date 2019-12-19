@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import * as serviceWorker from "./serviceWorker";
 
+import { navigate, parseLocation } from "./Route";
 import { mergeStyles } from "office-ui-fabric-react";
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 
@@ -39,6 +40,17 @@ render();
 if (process.env.NODE_ENV === "development" && module.hot) {
   module.hot.accept("./App", render);
 }
+
+// Handle browser navigation events
+window.addEventListener(
+  "hashchange",
+  () => {
+    var location = parseLocation(window.location.hash.substring(1));
+    console.debug("-> url hash change ", location);
+    store.dispatch(navigate({ to: location }));
+  },
+  false
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
