@@ -40,26 +40,20 @@ const router = zero<Location>()
 export const parseLocation = (s: string): Location =>
   parse(router, Route.parse(s), notFound(s));
 
-export const setRoute = (location: Location): void => {
-  console.log("setRoute: ", location);
+const updateHash = (to: string): void => {
+  const hz = `#${to}`;
+  window.location.replace(
+    window.location.pathname + window.location.search + hz
+  );
+};
+
+const setRoute = (location: Location): void => {
   switch (location._tag) {
     case "Home":
-      const homeLocation = format(homeMatch.formatter, location);
-      console.log("setRoute *********: ", homeLocation);
-      const hz = `#${homeLocation}`;
-      //      window.history.pushState({}, "", hz );
-      window.location.replace(
-        window.location.pathname + window.location.search + hz
-      );
+      updateHash(format(homeMatch.formatter, location));
       break;
     case "Counter":
-      const counterLocation = format(counterMatch.formatter, location);
-      const cu = `#${counterLocation}`;
-      //window.history.pushState({}, "", cu);
-      console.log("setRoute------->: ", counterLocation);
-      window.location.replace(
-        window.location.pathname + window.location.search + cu
-      );
+      updateHash(format(counterMatch.formatter, location));
       break;
     case "NotFound":
       console.log("not found", location);
@@ -80,30 +74,43 @@ interface NavigationPayload {
 
 interface RouteState {
   location: Location;
+  navigating: boolean;
 }
 
 let initialState: RouteState = {
   location: parseLocation(window.location.hash.substring(1)),
+  navigating: false
 };
 
 const routerSlice = createSlice({
   name: "router",
   initialState: initialState,
   reducers: {
-    navigate: (state, action: PayloadAction<NavigationPayload>) => {
-      const from = state.location;
+    navigateStart: (state, action: PayloadAction<NavigationPayload>) => {
+      state.navigating = true;
+    },
+    navigateEnd: (state, action: PayloadAction<NavigationPayload>) => {
       const to = action.payload.to;
-      console.debug(`navigate from ${from} to:${to}`);
-      if (from !== to) {
-        setRoute(to);
-        return { location: to };
-      } else {
-        return state
-      }
+      return { location: to, navigating: false };
     }
   }
 });
 
-export const { navigate } = routerSlice.actions;
+const { navigateStart, navigateEnd } = routerSlice.actions;
+
+export const navigatedTo = (to: Location): AppThunk => dispatch => {
+  console.debug("url hash changed to:", to._tag);
+  dispatch(navigateEnd({ to: to }));
+};
+
+export const navigate = (to: Location): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  const current = state.location.location;
+  console.debug(`navigate from -> to : ${current._tag} -> ${to._tag}`);
+  if (current !== to) {
+    setRoute(to);
+    dispatch(navigateStart({ to: to }));
+  }
+};
 
 export default routerSlice.reducer;

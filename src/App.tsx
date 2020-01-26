@@ -1,6 +1,7 @@
 import React from "react";
+//import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import { Stack } from "office-ui-fabric-react";
+import { Stack, Spinner } from "office-ui-fabric-react";
 
 import { NotFoundPage } from "./Components";
 import { CounterPage } from "./Counter";
@@ -12,7 +13,9 @@ import { RootState } from "./store";
 export const App: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const { n, error } = useSelector((state: RootState) => state.counter);
-  const { location } = useSelector((state: RootState) => state.location);
+  const { location, navigating } = useSelector(
+    (state: RootState) => state.location
+  );
 
   const dispatchIncrement = (step: number) => {
     dispatch(increment({ n: step }));
@@ -45,9 +48,9 @@ export const App: React.FunctionComponent = () => {
       >
         {(() => {
           //console.log("currentpage", location._tag);
-          //if (navigating) {
-          //return <Spinner />;
-          //}
+          if (navigating) {
+            return <Spinner />;
+          }
           switch (location._tag) {
             case "Home":
             case "Counter":

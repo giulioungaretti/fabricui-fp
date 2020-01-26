@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import * as serviceWorker from "./serviceWorker";
 
-import { navigate, parseLocation } from "./Route";
+import { navigatedTo, parseLocation } from "./Route";
 import { mergeStyles } from "office-ui-fabric-react";
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 
@@ -46,8 +46,7 @@ window.addEventListener(
   "hashchange",
   () => {
     var location = parseLocation(window.location.hash.substring(1));
-    console.debug("-> url hash change ", location);
-    store.dispatch(navigate({ to: location }));
+    store.dispatch(navigatedTo(location));
   },
   false
 );

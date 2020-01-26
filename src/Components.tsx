@@ -39,12 +39,9 @@ export const Header: React.FC<IRoute> = props => {
       <Text variant="xxLarge" styles={boldStyle}>
         {`route: ${props.route}`}
       </Text>
+      <DefaultButton onClick={() => dispatch(navigate(home))} text="home" />
       <DefaultButton
-        onClick={() => dispatch(navigate({ to: home }))}
-        text="home"
-      />
-      <DefaultButton
-        onClick={() => dispatch(navigate({ to: counter }))}
+        onClick={() => dispatch(navigate(counter))}
         text="counter startNavigation"
       />
       <a href="#/counter"> test</a>
