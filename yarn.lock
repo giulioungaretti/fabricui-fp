@@ -4493,10 +4493,10 @@ fp-ts-routing@^0.5.1:
   resolved "https://registry.yarnpkg.com/fp-ts-routing/-/fp-ts-routing-0.5.1.tgz#7a82a1cffb20347b763d7ba8b8f63a0dc34d2bd2"
   integrity sha512-3OaBJJRCU/r/a7qd2Nt9uewENJ4JSMdDEjYWVy+8Z6u8l4RQiieJ7gVs2660l8YbZVclH5/RhLv3colFFV6WGA==
 
-fp-ts@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.3.1.tgz#8068bfcca118227932941101e062134d7ecd9119"
-  integrity sha512-KevPBnYt0aaJiuUzmU9YIxjrhC9AgJ8CLtLlXmwArovlNTeYM5NtEoKd86B0wHd7FIbzeE8sNXzCoYIOr7e6Iw==
+fp-ts@^2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.6.7.tgz#a86f904b86c93cd63300e6d40005e4caa57ccb6b"
+  integrity sha512-Uklx0kKrjwbYb142tbQZqWVHhvNzxZwJhr+gkIbwPt/exV0n8/dHDkAmB05vNKNnJMwoJr7i6pM3XW0bicrE7Q==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
