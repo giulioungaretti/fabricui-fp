@@ -1,9 +1,7 @@
 import React from "react";
-//import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import { Stack, Spinner } from "office-ui-fabric-react";
 
-import { NotFoundPage } from "./Components";
+import { Text, NotFoundPage } from "./Components";
 import { CounterPage } from "./Counter";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment } from "./CounterSlice";
@@ -26,53 +24,32 @@ export const App: React.FunctionComponent = () => {
   };
 
   return (
-    <Stack
-      verticalFill
-      styles={{
-        root: {
-          width: "100%",
-          margin: "0 auto",
-          textAlign: "center",
-          color: "#605e5c",
-          background: "white"
+    <div >
+      {(() => {
+        if (navigating) {
+          return <Text>loading</Text>;
         }
-      }}
-    >
-      <Stack
-        verticalFill
-        styles={{
-          root: {
-            width: "100%"
-          }
-        }}
-      >
-        {(() => {
-          //console.log("currentpage", location._tag);
-          if (navigating) {
-            return <Spinner />;
-          }
-          switch (location._tag) {
-            case "Home":
-            case "Counter":
-              return (
-                <CounterPage
-                  {...{ location: location._tag }}
-                  n={n}
-                  increment={1}
-                  error={error}
-                  dispatchIncrement={dispatchIncrement}
-                  dispatchDecrement={dispatchDecrement}
-                />
-              );
-            case "NotFound":
-              return <NotFoundPage />;
-            default:
-              const _exhaustiveCheck: never = location;
-              return _exhaustiveCheck;
-          }
-        })()}
-      </Stack>
-    </Stack>
+        switch (location._tag) {
+          case "Home":
+          case "Counter":
+            return (
+              <CounterPage
+                {...{ location: location._tag }}
+                n={n}
+                increment={1}
+                error={error}
+                dispatchIncrement={dispatchIncrement}
+                dispatchDecrement={dispatchDecrement}
+              />
+            );
+          case "NotFound":
+            return <NotFoundPage />;
+          default:
+            const _exhaustiveCheck: never = location;
+            return _exhaustiveCheck;
+        }
+      })()}
+    </div>
   );
 };
 
