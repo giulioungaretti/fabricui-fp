@@ -34,7 +34,7 @@ export const App: React.FunctionComponent = () => {
           case "Counter":
             return (
               <CounterPage
-                {...{ location: location._tag }}
+                location={location._tag}
                 n={n}
                 increment={1}
                 error={error}

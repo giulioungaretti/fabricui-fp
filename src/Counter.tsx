@@ -43,7 +43,7 @@ export const CounterPage = ({
   const dispatch = useDispatch();
   useEffect(
     () => {
-      dispatch(fetchInitialCounter());
+      dispatch(fetchInitialCounter())
     },
     [dispatch]
   );
