@@ -27,7 +27,10 @@ const counterSlice = createSlice({
     increment: (state, action: PayloadAction<Increment>) => {
       state.n = pipe(
         state.n,
-        fold(() => state.n, x => some(x + action.payload.n))
+        fold(
+          () => state.n,
+          (x) => some(x + action.payload.n)
+        )
       );
     },
     loadedCounter: (state, action: PayloadAction<number>) => {
@@ -39,34 +42,40 @@ const counterSlice = createSlice({
     decrement: (state, action: PayloadAction<Increment>) => {
       state.n = pipe(
         state.n,
-        fold(() => state.n, x => some(x - action.payload.n))
+        fold(
+          () => state.n,
+          (x) => some(x - action.payload.n)
+        )
       );
-    }
-  }
+    },
+  },
 });
 
 export const {
   increment,
   loadedCounter,
   failedCounter,
-  decrement
+  decrement,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;
 
 const Payload = t.type({
   amount: t.number,
-  base: t.number
+  base: t.string,
 });
 
-export const fetchInitialCounter = (): AppThunk => async dispatch => {
+export const fetchInitialCounter = (): AppThunk => async (dispatch) => {
   try {
     console.log("fire missile!");
     const response = await fetchCounter();
     const parsed = Payload.decode(response);
     if (e.isLeft(parsed)) {
       const errors = PathReporter.report(parsed);
-      const msg = `Errors: ${errors.join(", ")}`;
+      const msg = `Json parsing error: ${errors.join(
+        "\n "
+      )} \n payload \n ${JSON.stringify(response, null, "         ")}`;
+      console.error(msg);
       dispatch(failedCounter(msg));
     }
     if (e.isRight(parsed)) {

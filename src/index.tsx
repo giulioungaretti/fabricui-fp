@@ -4,28 +4,11 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import * as serviceWorker from "./serviceWorker";
+import { App } from "./App";
 
 import { navigatedTo, parseLocation } from "./Route";
-import { mergeStyles } from "office-ui-fabric-react";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
-
-initializeIcons();
-
-// Inject some global styles
-mergeStyles({
-  selectors: {
-    ":global(body), :global(html), :global(#root)": {
-      margin: 0,
-      padding: 0,
-      height: "100vh",
-      width: "100vw",
-      background: "red"
-    }
-  }
-});
 
 const render = () => {
-  const App = require("./App").default;
 
   ReactDOM.render(
     <Provider store={store}>

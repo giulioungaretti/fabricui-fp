@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  Stack,
-  Text,
-  DefaultButton,
-  Spinner,
-  MessageBar,
-  MessageBarType
-} from "office-ui-fabric-react";
-import { Header, boldStyle } from "./Components";
+
+import { Text, Header } from "./Components";
 import { Option, fold, isNone } from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
 import { useDispatch } from "react-redux";
@@ -33,15 +26,9 @@ interface IErrorBarProps {
 }
 
 const ErrorBar = (p: IErrorBarProps) => (
-  <MessageBar
-    messageBarType={MessageBarType.error}
-    isMultiline={false}
-    truncated={true}
-    onDismiss={() => window.location.reload()}
-    dismissButtonAriaLabel="Close"
-  >
+  <div>
     {p.error}
-  </MessageBar>
+  </div>
 );
 
 export const CounterPage = ({
@@ -64,10 +51,10 @@ export const CounterPage = ({
   let body = pipe(
     n,
     fold(
-      () => <Spinner />,
+      () => <Text>loading</Text>,
       counter => (
         <>
-          <Text variant="xxLarge" styles={boldStyle}>
+          <Text >
             {`count is: ${counter}`}
           </Text>
         </>
@@ -82,53 +69,38 @@ export const CounterPage = ({
         fold(
           () => (
             <>
-              <Stack
-                verticalFill
-                horizontalAlign="center"
-                verticalAlign="center"
-                styles={{
-                  root: {
-                    width: "100%"
-                  }
-                }}
-              >
-                <Stack horizontal>
-                  <DefaultButton
-                    disabled={isLoading}
-                    text="+"
-                    onClick={() => {
-                      dispatchIncrement(localIncrement);
-                    }}
-                  />
-                  {body}
-                  <DefaultButton
-                    disabled={isLoading}
-                    text="-"
-                    onClick={() => {
-                      dispatchDecrement(localIncrement);
-                    }}
-                  />
-                </Stack>
-                <Stack horizontal>
-                  <DefaultButton
-                    disabled={isLoading}
-                    text="+"
-                    onClick={() => {
-                      setLocalIncrement(localIncrement + 1);
-                    }}
-                  />
-                  <Text variant="xxLarge" styles={boldStyle}>
-                    {`increment is: ${localIncrement}`}
-                  </Text>
-                  <DefaultButton
-                    disabled={isLoading}
-                    text="-"
-                    onClick={() => {
-                      setLocalIncrement(localIncrement - 1);
-                    }}
-                  />
-                </Stack>
-              </Stack>
+              <div >
+                <button
+                  disabled={isLoading}
+                  onClick={() => {
+                    dispatchIncrement(localIncrement);
+                  }}
+                > + </button>
+                {body}
+                <button
+                  disabled={isLoading}
+                  onClick={() => {
+                    dispatchDecrement(localIncrement);
+                  }}
+                >+</button>
+              </div>
+              <div>
+                <button
+                  disabled={isLoading}
+                  onClick={() => {
+                    setLocalIncrement(localIncrement + 1);
+                  }}
+                > +1 </button>
+                <Text>
+                  {`increment is: ${localIncrement}`}
+                </Text>
+                <button
+                  disabled={isLoading}
+                  onClick={() => {
+                    setLocalIncrement(localIncrement - 1);
+                  }}
+                >-1</button>/
+              </div>
             </>
           ),
           error => <ErrorBar error={error} />
