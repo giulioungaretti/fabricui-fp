@@ -1,27 +1,20 @@
-import { combineReducers, configureStore, Action } from "@reduxjs/toolkit";
+import { Action, combineReducers, configureStore } from "@reduxjs/toolkit";
 import { ThunkAction } from "redux-thunk";
-
 import counterReducer from "./CounterSlice";
-import routerReducer from "./Route";
+import routerReducer from "./RouteSlice";
 
 const rootReducer = combineReducers({
   counter: counterReducer,
-  location: routerReducer
+  location: routerReducer,
 });
 
 const store = configureStore({
-  reducer: rootReducer
+  reducer: rootReducer,
 });
 
-// TODO: not sure about this at all ?
-if (process.env.NODE_ENV === "development" && module.hot) {
-  module.hot.accept("./", () => {
-    const newRootReducer = require("./").default;
-    store.replaceReducer(newRootReducer);
-  });
-}
-
 export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof rootReducer>;
-export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;
+export type RootState = ReturnType<typeof store.getState>;
+// NOTE: Action<string> might look strange here, but that's actually the correct type
+// of the prop type that is used in a redux action, redux toolkit hides this impementation
+export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 export default store;
