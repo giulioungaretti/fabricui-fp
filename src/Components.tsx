@@ -1,37 +1,29 @@
+import { Button } from "@fluentui/react-northstar";
 import React from "react";
-
 import { useDispatch } from "react-redux";
-
 import logo from "./fabric.png";
-import { navigate, home, counter } from "./Route";
-
-
-interface IRoute {
-  route: string;
-}
+import { counter, home, Location } from "./Route";
+import { navigate } from "./RouteSlice";
 
 type Props = {
   children?: React.ReactNode;
 };
 
 export const Text = ({ children }: Props) => {
-  return (
-    <div>
-      {children}
-    </div>
-  )
-}
+  return <div>{children}</div>;
+};
 
-
-export const Header: React.FC<IRoute> = props => {
+export const Header = (props: Location) => {
   const dispatch = useDispatch();
   return (
     <div>
-      <Text>
-        {`route: ${props.route}`}
-      </Text>
-      <button onClick={() => dispatch(navigate(home))} >Home </button>
-      <button onClick={() => dispatch(navigate(counter))} > Counter </button>
+      <Text>{`route: ${props._tag}`}</Text>
+      <Button
+        onClick={() => dispatch(navigate(home))}
+        content={"Home"}
+        primary
+      />
+      <Button onClick={() => dispatch(navigate(counter))}> Counter </Button>
       <a href="#/counter">use a to go to counter ? </a>
     </div>
   );
@@ -41,21 +33,18 @@ interface Data {
   someData: string;
 }
 
-export const Page: React.FC<Data> = props => {
+export const Page = (props: Data) => {
   return (
-    <div >
+    <div>
       <img src={logo} alt="logo" />
-      <Text>
-        {props.someData}
-      </Text>
+      <Text>{props.someData}</Text>
     </div>
   );
 };
 
-export const NotFoundPage: React.FC = () => {
+export const NotFoundPage = () => {
   return (
-    <div
-    >
+    <div>
       <img src={logo} alt="logo" />
       <Text>
         404: page not found

@@ -1,55 +1,45 @@
+import { pipe } from "fp-ts/lib/function";
+import { getOrElse } from "fp-ts/lib/Option";
 import React from "react";
-
-
-import { Text, NotFoundPage } from "./Components";
+import { Header, NotFoundPage, Text } from "./Components";
 import { CounterPage } from "./Counter";
-import { useSelector, useDispatch } from "react-redux";
-import { decrement, increment } from "./CounterSlice";
+import Home from "./Home";
+import { useAppSelector } from "./hook";
+import { Location } from "./Route";
 
-import { RootState } from "./store";
+const MainPage = (props: { navigating: boolean; location: Location }) => {
+  if (props.navigating) {
+    return <Text>loading</Text>;
+  }
+  switch (props.location._tag) {
+    case "Home":
+      return <Home msg="home"></Home>;
+    case "Counter":
+      return <CounterPage />;
+    case "NotFound":
+      return <NotFoundPage />;
+    default:
+      const _exhaustiveCheck: never = props.location;
+      return _exhaustiveCheck;
+  }
+};
 
-export const App: React.FunctionComponent = () => {
-  const dispatch = useDispatch();
-  const { n, error } = useSelector((state: RootState) => state.counter);
-  const { location, navigating } = useSelector(
-    (state: RootState) => state.location
-  );
-
-  const dispatchIncrement = (step: number) => {
-    dispatch(increment({ n: step }));
-  };
-
-  const dispatchDecrement = (step: number) => {
-    dispatch(decrement({ n: step }));
-  };
+export const App = () => {
+  const { n } = useAppSelector((state) => state.counter);
+  const { location, navigating } = useAppSelector((state) => state.location);
 
   return (
-    <div >
-      {(() => {
-        if (navigating) {
-          return <Text>loading</Text>;
-        }
-        switch (location._tag) {
-          case "Home":
-          case "Counter":
-            return (
-              <CounterPage
-                location={location._tag}
-                n={n}
-                increment={1}
-                error={error}
-                dispatchIncrement={dispatchIncrement}
-                dispatchDecrement={dispatchDecrement}
-              />
-            );
-          case "NotFound":
-            return <NotFoundPage />;
-          default:
-            const _exhaustiveCheck: never = location;
-            return _exhaustiveCheck;
-        }
-      })()}
-    </div>
+    <>
+      <Header {...location} />
+      <div>
+        outside count is{" "}
+        {pipe(
+          n,
+          getOrElse(() => 0)
+        )}
+      </div>
+      <MainPage location={location} navigating={navigating} />
+    </>
   );
 };
 

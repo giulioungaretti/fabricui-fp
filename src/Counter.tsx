@@ -1,88 +1,58 @@
-import React, { useState, useEffect } from "react";
-
-import { Text, Header } from "./Components";
-import { Option, fold, isNone } from "fp-ts/es6/Option";
+import { fold, isNone } from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
-import { useDispatch } from "react-redux";
-import { fetchInitialCounter } from "./CounterSlice";
+import { useEffect, useState } from "react";
+import { Text } from "./Components";
+import { decrement, fetchInitialCounter, increment } from "./CounterSlice";
+import ErrorBar from "./ErrorBar";
+import { useAppDispatch, useAppSelector } from "./hook";
 
-interface CounterPageState {
-  n: Option<number>;
-  increment: number;
-  error: Option<string>;
-}
+export const CounterPage = () => {
+  const dispatch = useAppDispatch();
+  const { n, error } = useAppSelector((state) => state.counter);
 
-interface CounterProps {
-  dispatchIncrement: (step: number) => void;
-  dispatchDecrement: (step: number) => void;
-}
+  const [localIncrement, setLocalIncrement] = useState(0);
 
-interface RouteProps {
-  location: string;
-}
-
-interface IErrorBarProps {
-  error: string;
-}
-
-const ErrorBar = (p: IErrorBarProps) => (
-  <div>
-    {p.error}
-  </div>
-);
-
-export const CounterPage = ({
-  location,
-  n,
-  increment,
-  error,
-  dispatchIncrement,
-  dispatchDecrement
-}: RouteProps & CounterProps & CounterPageState) => {
-  const [localIncrement, setLocalIncrement] = useState(increment);
-  const dispatch = useDispatch();
-  useEffect(
-    () => {
-      dispatch(fetchInitialCounter())
-    },
-    [dispatch]
-  );
+  useEffect(() => {
+    dispatch(fetchInitialCounter());
+  }, [dispatch]);
   const isLoading = isNone(n);
   let body = pipe(
     n,
     fold(
       () => <Text>loading</Text>,
-      counter => (
+      (counter) => (
         <>
-          <Text >
-            {`count is: ${counter}`}
-          </Text>
+          <Text>{`count is: ${counter}`}</Text>
         </>
       )
     )
   );
   return (
     <>
-      <Header route={location} />
       {pipe(
         error,
         fold(
           () => (
             <>
-              <div >
+              <div>
                 <button
                   disabled={isLoading}
                   onClick={() => {
-                    dispatchIncrement(localIncrement);
+                    dispatch(increment({ n: localIncrement }));
                   }}
-                > + </button>
+                >
+                  {" "}
+                  +{" "}
+                </button>
                 {body}
                 <button
                   disabled={isLoading}
                   onClick={() => {
-                    dispatchDecrement(localIncrement);
+                    dispatch(decrement({ n: localIncrement }));
                   }}
-                >+</button>
+                >
+                  +
+                </button>
               </div>
               <div>
                 <button
@@ -90,20 +60,24 @@ export const CounterPage = ({
                   onClick={() => {
                     setLocalIncrement(localIncrement + 1);
                   }}
-                > +1 </button>
-                <Text>
-                  {`increment is: ${localIncrement}`}
-                </Text>
+                >
+                  {" "}
+                  +1{" "}
+                </button>
+                <Text>{`increment is: ${localIncrement}`}</Text>
                 <button
                   disabled={isLoading}
                   onClick={() => {
                     setLocalIncrement(localIncrement - 1);
                   }}
-                >-1</button>/
+                >
+                  -1
+                </button>
+                /
               </div>
             </>
           ),
-          error => <ErrorBar error={error} />
+          (error) => <ErrorBar error={error} />
         )
       )}
     </>

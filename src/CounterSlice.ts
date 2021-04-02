@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-import { Option, some, none, fold } from "fp-ts/es6/Option";
+import * as e from "fp-ts/es6/Either";
+import { fold, none, Option, some } from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
-import { AppThunk } from "./store";
-import { fetchCounter } from "./http";
-
 import * as t from "io-ts";
 import { PathReporter } from "io-ts/lib/PathReporter";
-import * as e from "fp-ts/es6/Either";
+import { fetchCounter } from "./http";
+import { AppThunk } from "./store";
 
 interface Increment {
   n: number;
