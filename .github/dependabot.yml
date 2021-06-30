@@ -1,0 +1,114 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.22
+    - 14.14.24
+    - 14.14.25
+    - 14.14.26
+    - 14.14.28
+    - 14.14.30
+    - 14.14.31
+    - 14.14.32
+    - 14.14.33
+    - 14.14.34
+    - 14.14.35
+    - 14.14.36
+    - 14.14.37
+    - 14.14.39
+    - 14.14.41
+    - 15.0.0
+  - dependency-name: fp-ts
+    versions:
+    - 2.10.0
+    - 2.10.4
+    - 2.9.3
+    - 2.9.4
+    - 2.9.5
+  - dependency-name: "@testing-library/user-event"
+    versions:
+    - 13.1.2
+    - 13.1.3
+  - dependency-name: office-ui-fabric-react
+    versions:
+    - 7.157.1
+    - 7.157.2
+    - 7.158.0
+    - 7.158.1
+    - 7.158.2
+    - 7.158.3
+    - 7.159.0
+    - 7.160.0
+    - 7.160.1
+    - 7.160.2
+    - 7.160.3
+    - 7.161.0
+    - 7.162.0
+    - 7.162.1
+    - 7.163.0
+    - 7.164.0
+    - 7.164.1
+    - 7.164.2
+    - 7.165.0
+    - 7.165.1
+    - 7.165.2
+  - dependency-name: "@babel/types"
+    versions:
+    - 7.12.12
+    - 7.12.13
+    - 7.12.17
+    - 7.13.0
+    - 7.13.12
+    - 7.13.13
+    - 7.13.14
+  - dependency-name: react-redux
+    versions:
+    - 7.2.2
+    - 7.2.3
+  - dependency-name: io-ts
+    versions:
+    - 2.2.13
+    - 2.2.14
+    - 2.2.15
+  - dependency-name: handlebars
+    versions:
+    - 4.7.6
+    - 4.7.7
+  - dependency-name: elliptic
+    versions:
+    - 6.5.3
+    - 6.5.4
+  - dependency-name: "@types/react-redux"
+    versions:
+    - 7.1.16
+  - dependency-name: ini
+    versions:
+    - 1.3.7
+  - dependency-name: "@types/webpack-env"
+    versions:
+    - 1.16.0
+  - dependency-name: http-proxy
+    versions:
+    - 1.18.1
+  - dependency-name: dot-prop
+    versions:
+    - 4.2.1
+  - dependency-name: fp-ts-routing
+    versions:
+    - 0.5.4
+  - dependency-name: websocket-extensions
+    versions:
+    - 0.1.4
+  - dependency-name: acorn
+    versions:
+    - 5.7.4
+  - dependency-name: redux
+    versions:
+    - 4.0.5
